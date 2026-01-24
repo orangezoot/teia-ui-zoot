@@ -19,7 +19,11 @@ const Editions = ({ prefix, nft, className }) => {
   }, [isLoading, nft.listings, walletBlockMap])
   const ed = editionsForSale || 'X'
   return (
-    <div className={className}>
+    <div
+      className={className}
+      tabIndex={0}
+      aria-label={`Editions: ${ed} of ${nft.editions} available`}
+    >
       <p>
         {prefix ? (
           <span>
