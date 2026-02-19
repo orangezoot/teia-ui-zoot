@@ -34,7 +34,6 @@ const TokenHover = ({ nft, visible }: { nft: NFT; visible: boolean }) => {
       {visible && (
         <motion.div {...info_variants} className={styles.hover_details}>
           <h3
-            tabIndex={0}
             aria-label={`OBJKT number ${nft.token_id}`}
             className={styles.hover_token_id}
           >
@@ -42,7 +41,6 @@ const TokenHover = ({ nft, visible }: { nft: NFT; visible: boolean }) => {
           </h3>
           <h4>{nft.name}</h4>
           <p
-            tabIndex={0}
             aria-label={`Description: ${nft.description}`}
             className={styles.hover_description}
           >
@@ -81,10 +79,10 @@ export const FeedItem = ({ nft }: { nft: NFT }) => {
   return (
     <div
       ref={containerRef}
-      tabIndex={0}
       aria-label={`OBJKT ${nft.token_id}: ${nft.name}`}
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
+      onFocus={() => setHover(true)}
       onBlur={handleBlur}
       className={containerClasses}
     >

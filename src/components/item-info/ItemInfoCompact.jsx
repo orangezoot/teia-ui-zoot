@@ -9,11 +9,7 @@ import { useParams } from 'react-router'
 import { useLocalSettings } from '@context/localSettingsStore'
 
 const Price = ({ price }) => (
-  <div
-    className={styles.price_box}
-    tabIndex={0}
-    aria-label={`Price: ${price} Tezos`}
-  >
+  <div className={styles.price_box} aria-label={`Price: ${price} Tezos`}>
     {price}
     <TezosIcon size={16} />
   </div>

@@ -21,7 +21,6 @@ const Editions = ({ prefix, nft, className }) => {
   return (
     <div
       className={className}
-      tabIndex={0}
       aria-label={`Editions: ${ed} of ${nft.editions} available`}
     >
       <p>
