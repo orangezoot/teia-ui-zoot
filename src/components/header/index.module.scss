@@ -58,6 +58,12 @@
   }
 }
 
+// Events dropdown list: scrolls inside the viewport instead of the page.
+.events_scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 .separator {
   height: 25%;
 }

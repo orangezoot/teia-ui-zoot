@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import DropdownButton from '@atoms/dropdown/DropdownButton'
 import { EventIcon } from '@icons/index'
 import { DropDown } from '@atoms/dropdown/index'
-import { sample_events } from '@components/header/sample_events'
+import eventsResponse from '@data/events/events.json'
 
 const meta: Meta<typeof DropDown> = {
   title: 'Atoms/Dropdown',
@@ -22,9 +22,8 @@ export const Base: Story = {
       menuID="events"
       label={'A sample dropdown with an Icon'}
     >
-      {/* <EventMenu events={sample_events} /> */}
       <DropDown menuID="events" vertical>
-        {sample_events?.map((evt) => (
+        {eventsResponse.events.map((evt) => (
           <div>
             <h3>{evt.title}</h3>
             <p>{evt.subtitle}</p>

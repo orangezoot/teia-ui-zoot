@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { walletPreview } from '@utils/string'
 
 import { useLocation, useNavigate } from 'react-router'
@@ -15,10 +15,9 @@ import { EventBanner } from '@components/banners'
 import RotatingLogo from '@atoms/logo'
 import { HelpLink } from '@components/tour'
 
-// TODO (mel): Remove this sample data and decide how/where to fetch it.
-import { sample_events } from './sample_events'
 import { useMedia } from 'react-use'
 import EventCard from './events/EventCard'
+import { useEvents } from '@hooks/use-events'
 import { Line } from '@atoms/line'
 import { ConfigIcon } from '@icons'
 import classNames from 'classnames'
@@ -27,6 +26,18 @@ import { useLocalSettings } from '@context/localSettingsStore'
 import { useUserStore } from '@context/userStore'
 import { useModalStore } from '@context/modalStore'
 import { shallow } from 'zustand/shallow'
+
+/** Map a GET /events row into the dropdown's EventCard shape. */
+const toDropdownEvent = (evt) => ({
+  id: evt.id,
+  title: evt.title,
+  date: evt.date,
+  icon: evt.icon,
+  feed: evt.feed,
+  link: evt.link,
+  subtitle: evt.subtitle,
+  content: evt.description,
+})
 
 export const Header = () => {
   const [
@@ -77,6 +88,17 @@ export const Header = () => {
   const location = useLocation()
 
   const isWide = useMedia('(min-width: 600px)')
+
+  // Newest first; undated events keep their order at the end.
+  const { events } = useEvents()
+  const dropdownEvents = useMemo(
+    () =>
+      events.map(toDropdownEvent).sort((a, b) => {
+        if (!a.date || !b.date) return !a.date - !b.date
+        return b.date.localeCompare(a.date)
+      }),
+    [events]
+  )
 
   const [logoSeed, setLogoSeed] = useState()
   // Clicking the logo more than twice reveals a "?" linking to the logo site.
@@ -173,16 +195,24 @@ export const Header = () => {
               label={isWide ? 'Events' : ''}
               id={`events-${location.pathname}`}
             >
-              {/* <EventMenu events={sample_events} /> */}
               <DropDown menuID="events" vertical>
-                {sample_events?.map((evt) => {
-                  return (
-                    <EventCard
-                      event={evt}
-                      key={`${evt.title} - ${evt.subtitle}`}
-                    />
-                  )
-                })}
+                <div
+                  className={styles.events_scroll}
+                  ref={(el) => {
+                    if (!el) return
+                    // Fit to the remaining viewport below the toggle (its
+                    // wrapper isn't animated, so the rect is stable on mount).
+                    // 2px = dropdown container border.
+                    const top =
+                      el.parentElement.parentElement.getBoundingClientRect()
+                        .bottom
+                    el.style.maxHeight = `${window.innerHeight - top - 2}px`
+                  }}
+                >
+                  {dropdownEvents.map((evt) => {
+                    return <EventCard event={evt} key={evt.id} />
+                  })}
+                </div>
               </DropDown>
             </DropdownButton>
           </div>
