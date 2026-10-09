@@ -1,27 +1,11 @@
 {
   "events": [
     {
-      "id": "tan-tan",
-      "title": "Tan-Tan",
-      "subtitle": "Digital art project",
-      "description": "A digital art project and event website.",
-      "link": "https://tan-tan.art/",
-      "screenshot": "/events/tan-tan.png",
-      "bannerColor": "#000000"
-    },
-    {
-      "id": "malicious-sheep",
-      "title": "Malicious Sheep",
-      "subtitle": "Digital art project",
-      "description": "A digital art project website.",
-      "link": "https://malicioussheep.art/",
-      "screenshot": "/events/malicioussheep.png",
-      "bannerColor": "#f0f0f0"
-    },
-    {
       "id": "byob-mx-teia",
       "title": "BYOB mx TEIA",
       "subtitle": "Digital art exhibition + NFT drop",
+      "date": "2026-06-25",
+      "icon": "📽️",
       "description": "Bring Your Own Beamer, organised by Psychofuturist and supported by Teia.",
       "link": "https://byob.teia.art/",
       "screenshot": "/events/byob.png",
@@ -31,6 +15,7 @@
       "id": "cind-tezos-2026",
       "title": "Cind Tezos 2026",
       "subtitle": "2026 gallery",
+      "date": "2026-02-20",
       "description": "A community event gallery on Tezos.",
       "link": "https://cindtezos2026-gallery.teia.art/",
       "screenshot": "/events/cindtezos2026.png",
@@ -40,6 +25,7 @@
       "id": "tezos-pride-2026",
       "title": "Tezos Pride 2026",
       "subtitle": "2026 gallery",
+      "date": "2026-06-01",
       "description": "Celebrating and supporting the 2SLGBTQ+ community in the Tezos ecosystem.",
       "link": "https://tezospride2026-gallery.teia.art/",
       "screenshot": "/events/tezospride2026.png",
@@ -49,6 +35,7 @@
       "id": "voices-of-iran",
       "title": "Voices of Iran",
       "subtitle": "Community gallery",
+      "date": "2025-09-16",
       "description": "A gallery for voices and artists from Iran.",
       "link": "https://voicesofiran-gallery.teia.art/",
       "screenshot": "/events/voicesofiran.png",
@@ -58,6 +45,7 @@
       "id": "art4life",
       "title": "Art4Life",
       "subtitle": "Community gallery",
+      "date": "2025-11-08",
       "description": "A Tezos community art gallery.",
       "link": "https://art4life-gallery.teia.art/",
       "screenshot": "/events/art4life.png",
@@ -67,6 +55,8 @@
       "id": "tezcon-2026",
       "title": "TezCon 2026 Gallery",
       "subtitle": "TezCon 2026",
+      "date": "2026-09-10",
+      "icon": "🖼️",
       "description": "Gallery for the TezCon 2026 event.",
       "link": "https://tezcon2026-gallery.teia.art/",
       "screenshot": "/events/tezcon2026.png",
@@ -76,6 +66,7 @@
       "id": "computational-jewelry",
       "title": "Computational Jewelry",
       "subtitle": "Community gallery",
+      "date": "2026-04-18",
       "description": "A gallery exploring computational jewelry and digital art.",
       "link": "https://computationaljewelry-gallery.teia.art/",
       "screenshot": "/events/computationaljewelry.png",
@@ -85,6 +76,7 @@
       "id": "cycles",
       "title": "Cycles",
       "subtitle": "Interactive gallery",
+      "date": "2025-07-21",
       "description": "An interactive Teia event experience.",
       "link": "https://cycles.teia.art/",
       "screenshot": "/events/cycles.png",
@@ -94,37 +86,98 @@
       "id": "midsummer-party-2026",
       "title": "Midsummer Party 2026",
       "subtitle": "2026 gallery",
+      "date": "2026-06-19",
       "description": "Gallery for the Midsummer Party 2026 event.",
       "link": "https://midsummerparty2026-gallery.teia.art/",
       "screenshot": "/events/midsummerparty2026.png",
       "bannerColor": "#080010"
     },
     {
-      "id": "tezos",
-      "title": "Tezos",
-      "subtitle": "Tezos ecosystem",
-      "description": "The official Tezos website.",
-      "link": "https://tezos.com/",
-      "screenshot": "/events/tezos.png",
-      "bannerColor": "#202020"
+      "id": "art4artists",
+      "title": "Art4Artists",
+      "subtitle": "Art4Artists",
+      "date": "2024-10-22",
+      "icon": "🖼️",
+      "description": "Tezos Ecosystem #Art4Artists Breadfond",
+      "link": "https://x.com/EggsUnknow/status/1848805355620602309"
     },
     {
-      "id": "teia",
-      "title": "Teia",
-      "subtitle": "Community-owned NFT marketplace",
-      "description": "The open, community-owned Tezos NFT marketplace.",
-      "link": "https://teia.art/",
-      "screenshot": "/events/teia.png",
-      "bannerColor": "#101010"
+      "id": "objkt4objkt-4th-edition",
+      "title": "Objkt4Objkt (4th edition)",
+      "subtitle": "Objkt4Objkt",
+      "date": "2024-04-10",
+      "icon": "🖼️",
+      "description": "Community art event to celebrate the creativity and talent in the space, in an inclusive way!",
+      "link": "https://twitter.com/kikanicolela/status/1778112619066413422"
     },
     {
-      "id": "bitcointalk",
-      "title": "BitcoinTalk",
-      "subtitle": "Crypto community forum",
-      "description": "A long-running discussion forum for the cryptocurrency community.",
-      "link": "https://bitcointalk.org/",
-      "screenshot": "/events/bitcointalk.png",
-      "bannerColor": "#e0e0e0"
+      "id": "anaverse-integration",
+      "title": "Anaverse Integration",
+      "subtitle": "new feature",
+      "date": "2023-05-24",
+      "icon": "🖼️",
+      "description": "Teia just received a nice little new feature: 3D previews for your NFTs! This new addition allows you to experience your tokens in a immersive genertive 3D space.",
+      "link": "https://blog.teia.art/blog/anaverse-integration-announcement"
+    },
+    {
+      "id": "tez4pal",
+      "title": "Tez4Pal",
+      "subtitle": "January 20 to February 20 2024",
+      "date": "2024-01-20",
+      "icon": "🇵🇸",
+      "feed": "tez4pal",
+      "description": "The Tezos Fundraiser  #Tez4Pal, supporting Gaza civilians, is scheduled from Jan 20 to Feb 20.",
+      "link": "https://twitter.com/LN0ir/status/1745946304742576400"
+    },
+    {
+      "id": "tezquakeaid-morocco",
+      "title": "TezQuakeAid - Morocco",
+      "subtitle": "9th September 2023 - ",
+      "date": "2023-09-09",
+      "icon": "🇲🇦",
+      "feed": "morocco-quake-aid",
+      "description": "In September 2023, Morocco has been hit by a devastating earthquake. The TezQuateAid team launched a fundraising campaign dedicated to assisting those who have been impacted by this tragic catastrophe.",
+      "link": "https://app.joyn.xyz/space/tezquakeaid-ec7f1f650671"
+    },
+    {
+      "id": "tezos-pride",
+      "title": "Tezos Pride",
+      "subtitle": "throughout June and beyond every year",
+      "date": "2023-06-01",
+      "icon": "🏳️‍🌈",
+      "feed": "tezospride",
+      "description": "TezosPride is a continuous event to celebrate and support the 2SLGBTQ+ community in the Tezos ecosystem. The main event spans Pride Month (June) annually.",
+      "link": "https://github.com/teia-community/teia-docs/wiki/Tezospride"
+    },
+    {
+      "id": "tezos-for-iran",
+      "title": "Tezos for Iran",
+      "subtitle": "25 October - 1st January 2022",
+      "date": "2022-10-25",
+      "icon": "🇮🇷",
+      "feed": "iran",
+      "description": "In the wake of the historic protests against the killing of young Iranian women, Teia has set up a charity fundraiser in solidarity with the protests and to raise awareness for womens rights in Iran.",
+      "link": "https://github.com/teia-community/teia-docs/wiki/Tezos-for-Iran"
+    },
+    {
+      "id": "pakistan-fundraiser",
+      "title": "Pakistan Fundraiser",
+      "subtitle": "1st October - 2nd December 2022",
+      "date": "2022-10-01",
+      "icon": "🇵🇰",
+      "feed": "pakistan",
+      "description": "In late August, torrential monsoon triggered the biggest climate related disasters in history: a third of Pakistans landmass is submerged in water affecting tens of millions of people, washing away houses, destroying crops, hospitals, schools. To date, more than 1,500 people have lost their lives to the floods, including 552 children. Currently, 73% of the flood victims have inadequate access to necessities like food, water, medical aid, etc.",
+      "link": "https://github.com/teia-community/teia-docs/wiki/Pakistan-Fundraiser"
+    },
+    {
+      "id": "ukraine",
+      "title": "Ukraine",
+      "subtitle": "Mid November - Late December 2022",
+      "date": "2022-11-15",
+      "icon": "🇺🇦",
+      "feed": "ukraine",
+      "description": "In support for our Ukrainian friends,\nbrothers and sisters, [Veqtor](https://twitter.com/Veqtor/status/1497167740146266112?s=20&t=mmvu8KPxybOa0TQXX32nFw)\nfrom [Versum](https://twitter.com/versumofficial) in conjunction with [FxHash](https://twitter.com/fx_hash_/status/1497113572085751810?s=20&t=mmvu8KPxybOa0TQXX32nFw)\nset up a [shared donation contract](https://tzkt.io/KT1DWnLiUkNtAQDErXxudFEH63JC6mqg3HEx/info),\nthat will redirect tezos to multiple charity orgs (listed below) in support of Ukraine relief, and we want to help support this initiative.\nyou can find the source code on [github](https://github.com/ciphrd/public-contracts/blob/master/donations_ukraine.py)",
+      "link": "https://github.com/teia-community/teia-docs/wiki/Ukranian-Fundraising"
     }
   ]
 }
