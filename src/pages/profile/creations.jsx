@@ -1,3 +1,4 @@
+import useSWR from 'swr'
 import { gql } from 'graphql-request'
 import { BaseTokenFieldsFragment } from '@data/api'
 import {
@@ -24,6 +25,26 @@ const TOUR = [
   VIEW_MODE_STEP,
 ]
 
+// Everything the artist minted (incl. solo collab contracts), newest first.
+const extractCreations = (data) => {
+  const tokens = data.artist_tokens
+  const collab_tokens = data.artist_single_collabs
+    .map((collab) => {
+      if (collab?.split_contract?.created_tokens) {
+        if (collab.split_contract.shareholders.length === 1) {
+          return collab?.split_contract?.created_tokens
+        }
+      }
+      return []
+    })
+    .flat()
+
+  return orderBy([...tokens, ...collab_tokens], ['minted_at'])
+    .reverse()
+    .filter((token) => token.mime_type !== 'text/markdown')
+    .map((token) => ({ ...token, key: token.token_id }))
+}
+
 export default function Creations() {
   const { showRestricted, overrideProtections, address } = useOutletContext()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -39,12 +60,44 @@ export default function Creations() {
       { preventScrollReset: true }
     )
 
+  const filterTokens = (tokens, type) => {
+    if (type === FILTER_PRIMARY) {
+      return tokens.filter(({ listings, artist_address }) =>
+        listings?.some(
+          (l) =>
+            l.seller_address === address || l.seller_address === artist_address
+        )
+      )
+    }
+
+    if (type === FILTER_SECONDARY) {
+      return tokens.filter(({ listings, artist_address }) =>
+        listings?.some(
+          (l) =>
+            l.seller_address !== address && l.seller_address !== artist_address
+        )
+      )
+    }
+
+    if (type === FILTER_NOT_FOR_SALE) {
+      return tokens.filter(({ listings }) => !listings?.length)
+    }
+
+    // all tokens
+    return tokens
+  }
+
+  // Shares TokenCollection's SWR cache (same [namespace, ...swrParams] key).
+  const { data } = useSWR(['creations', address])
+
   return (
     <>
       <Tour name="creations" steps={TOUR} />
       <Filters
         filter={filter}
         onChange={setFilter}
+        tokens={data && extractCreations(data)}
+        filterTokens={filterTokens}
         items={[
           { type: FILTER_ALL, label: 'All' },
           { type: FILTER_PRIMARY, label: 'Primary' },
@@ -62,54 +115,10 @@ export default function Creations() {
         variables={{ address }}
         emptyMessage="no creations"
         maxItems={null}
-        extractTokensFromResponse={(data, { postProcessTokens }) => {
-          const tokens = data.artist_tokens
-          const collab_tokens = data.artist_single_collabs
-            .map((collab) => {
-              if (collab?.split_contract?.created_tokens) {
-                if (collab.split_contract.shareholders.length === 1) {
-                  return collab?.split_contract?.created_tokens
-                }
-              }
-              return []
-            })
-            .flat()
-
-          return postProcessTokens(
-            orderBy([...tokens, ...collab_tokens], ['minted_at'])
-              .reverse()
-              .filter((token) => token.mime_type !== 'text/markdown')
-              .map((token) => ({ ...token, key: token.token_id }))
-          )
-        }}
-        postProcessTokens={(tokens) => {
-          if (filter === FILTER_PRIMARY) {
-            return tokens.filter(({ listings, artist_address }) =>
-              listings?.some(
-                (l) =>
-                  l.seller_address === address ||
-                  l.seller_address === artist_address
-              )
-            )
-          }
-
-          if (filter === FILTER_SECONDARY) {
-            return tokens.filter(({ listings, artist_address }) =>
-              listings?.some(
-                (l) =>
-                  l.seller_address !== address &&
-                  l.seller_address !== artist_address
-              )
-            )
-          }
-
-          if (filter === FILTER_NOT_FOR_SALE) {
-            return tokens.filter(({ listings }) => !listings?.length)
-          }
-
-          // all tokens
-          return tokens
-        }}
+        extractTokensFromResponse={(data, { postProcessTokens }) =>
+          postProcessTokens(extractCreations(data))
+        }
+        postProcessTokens={(tokens) => filterTokens(tokens, filter)}
         query={gql`
             ${BaseTokenFieldsFragment}
             query creatorGallery($address: String!) {

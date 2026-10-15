@@ -1,3 +1,4 @@
+import useSWR from 'swr'
 import uniqBy from 'lodash/uniqBy'
 import { gql } from 'graphql-request'
 import TokenCollection from '@atoms/token-collection'
@@ -23,6 +24,41 @@ const TOUR = [
   VIEW_MODE_STEP,
 ]
 
+// Held tokens plus ones this wallet has listed, deduped.
+const extractCollection = (data) => {
+  const heldTokens = data.holdings.map(({ token }) => token)
+  const swappedTokens = data.listings.map(({ token, seller_address }) => ({
+    ...token,
+    listing_seller_address: seller_address,
+  }))
+  return uniqBy(
+    [...heldTokens, ...swappedTokens],
+    ({ token_id }) => token_id
+  ).map((token) => ({ ...token, key: token.token_id }))
+}
+
+const filterTokens = (tokens, type) => {
+  if (type === FILTER_NOT_FOR_SALE) {
+    return tokens.filter(({ listings }) => !listings?.length)
+  }
+
+  if (type === FILTER_PRIMARY) {
+    // Listed directly by the original artist
+    return tokens.filter(({ listings, artist_address }) =>
+      listings?.some((l) => l.seller_address === artist_address)
+    )
+  }
+
+  if (type === FILTER_SECONDARY) {
+    // Listed by a collector (anyone other than the original artist)
+    return tokens.filter(({ listings, artist_address }) =>
+      listings?.some((l) => l.seller_address !== artist_address)
+    )
+  }
+
+  return tokens
+}
+
 export default function Collections() {
   const { showRestricted, overrideProtections, address } = useOutletContext()
 
@@ -39,12 +75,17 @@ export default function Collections() {
       { preventScrollReset: true }
     )
 
+  // Shares TokenCollection's SWR cache (same [namespace, ...swrParams] key).
+  const { data } = useSWR(['collections', address])
+
   return (
     <>
       <Tour name="collection" steps={TOUR} />
       <Filters
         filter={filter}
         onChange={setFilter}
+        tokens={data && extractCollection(data)}
+        filterTokens={filterTokens}
         items={[
           { type: FILTER_ALL, label: 'All' },
           { type: FILTER_PRIMARY, label: 'Primary' },
@@ -62,42 +103,10 @@ export default function Collections() {
         variables={{ address }}
         emptyMessage="no collections"
         maxItems={null}
-        postProcessTokens={(tokens) => {
-          if (filter === FILTER_NOT_FOR_SALE) {
-            return tokens.filter(({ listings }) => !listings?.length)
-          }
-
-          if (filter === FILTER_PRIMARY) {
-            // Listed directly by the original artist
-            return tokens.filter(({ listings, artist_address }) =>
-              listings?.some((l) => l.seller_address === artist_address)
-            )
-          }
-
-          if (filter === FILTER_SECONDARY) {
-            // Listed by a collector (anyone other than the original artist)
-            return tokens.filter(({ listings, artist_address }) =>
-              listings?.some((l) => l.seller_address !== artist_address)
-            )
-          }
-
-          return tokens
-        }}
-        extractTokensFromResponse={(data, { postProcessTokens }) => {
-          const heldTokens = data.holdings.map(({ token }) => token)
-          const swappedTokens = data.listings.map(
-            ({ token, seller_address }) => ({
-              ...token,
-              listing_seller_address: seller_address,
-            })
-          )
-          const tokens = uniqBy(
-            [...heldTokens, ...swappedTokens],
-            ({ token_id }) => token_id
-          ).map((token) => ({ ...token, key: token.token_id }))
-
-          return postProcessTokens(tokens)
-        }}
+        postProcessTokens={(tokens) => filterTokens(tokens, filter)}
+        extractTokensFromResponse={(data, { postProcessTokens }) =>
+          postProcessTokens(extractCollection(data))
+        }
         query={gql`
           ${BaseTokenFieldsFragment}
           query collectorGallery($address: String!) {

@@ -38,6 +38,26 @@ const flattenCollabTokens = (data) =>
     .map((shareholder) => get(shareholder, 'split_contract.created_tokens', []))
     .flat()
 
+const filterTokens = (tokens, type) => {
+  if (type === FILTER_NOT_FOR_SALE) {
+    return tokens.filter(({ listings }) => !listings?.length)
+  }
+
+  if (type === FILTER_PRIMARY) {
+    return tokens.filter(({ listings, artist_address }) =>
+      listings?.some((l) => l.seller_address === artist_address)
+    )
+  }
+
+  if (type === FILTER_SECONDARY) {
+    return tokens.filter(({ listings, artist_address }) =>
+      listings?.some((l) => l.seller_address !== artist_address)
+    )
+  }
+
+  return tokens
+}
+
 // Remount the feed when the profile changes.
 const TOUR = [
   {
@@ -108,6 +128,21 @@ function CollabsFeed({ showRestricted, address, overrideProtections }) {
     }))
   }, [data])
 
+  // Visible collab tokens; sort and collab/unverified choices apply.
+  const extractCollabs = (data) =>
+    orderBy(
+      flattenCollabTokens(data),
+      ['minted_at'],
+      [sortMode === 'newest' ? 'desc' : 'asc']
+    )
+      .filter((token) => showUnverified || get(token, 'teia_meta.is_signed'))
+      .filter(
+        (token) =>
+          collabFilter.length === 0 ||
+          collabFilter.includes(token.artist_address)
+      )
+      .map((token) => ({ ...token, key: token.token_id }))
+
   const collabSelectOptions = collabOptions.map((c) => ({
     value: c.address,
     label: c.name,
@@ -120,6 +155,8 @@ function CollabsFeed({ showRestricted, address, overrideProtections }) {
       <Filters
         filter={filter}
         onChange={setFilter}
+        tokens={data && extractCollabs(data)}
+        filterTokens={filterTokens}
         items={[
           { type: FILTER_ALL, label: 'All' },
           { type: FILTER_PRIMARY, label: 'Primary' },
@@ -230,43 +267,10 @@ function CollabsFeed({ showRestricted, address, overrideProtections }) {
         variables={{ address }}
         emptyMessage="no collabs"
         maxItems={null}
-        postProcessTokens={(tokens) => {
-          if (filter === FILTER_NOT_FOR_SALE) {
-            return tokens.filter(({ listings }) => !listings?.length)
-          }
-
-          if (filter === FILTER_PRIMARY) {
-            return tokens.filter(({ listings, artist_address }) =>
-              listings?.some((l) => l.seller_address === artist_address)
-            )
-          }
-
-          if (filter === FILTER_SECONDARY) {
-            return tokens.filter(({ listings, artist_address }) =>
-              listings?.some((l) => l.seller_address !== artist_address)
-            )
-          }
-
-          return tokens
-        }}
-        extractTokensFromResponse={(data, { postProcessTokens }) => {
-          return postProcessTokens(
-            orderBy(
-              flattenCollabTokens(data),
-              ['minted_at'],
-              [sortMode === 'newest' ? 'desc' : 'asc']
-            )
-              .filter(
-                (token) => showUnverified || get(token, 'teia_meta.is_signed')
-              )
-              .filter(
-                (token) =>
-                  collabFilter.length === 0 ||
-                  collabFilter.includes(token.artist_address)
-              )
-              .map((token) => ({ ...token, key: token.token_id }))
-          )
-        }}
+        postProcessTokens={(tokens) => filterTokens(tokens, filter)}
+        extractTokensFromResponse={(data, { postProcessTokens }) =>
+          postProcessTokens(extractCollabs(data))
+        }
         query={gql`
           ${BaseTokenFieldsFragment}
           query GetCollabTokens($address: String!) {

@@ -497,7 +497,9 @@ export const FeedToolbar = ({ feeds_menu = false, hazards, filters }) => {
   // TODO: finish the filtering logic
   // const filters = false
   return (
-    <motion.div className={styles.toolbar}>
+    <motion.div
+      className={`${styles.toolbar} ${feeds_menu ? '' : styles.view_mode_only}`}
+    >
       {feeds_menu && (
         <div className={styles.sort_area}>
           {[...sortFeedMap.entries()].map(([k, label]) => {

@@ -42,11 +42,20 @@
 .profile {
   display: grid;
 
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-  gap: 0px 10px;
-  grid-template-areas: 'Photo Details';
+  // Phone: photo on top, details stacked beneath.
+  grid-template-columns: 1fr;
+  gap: 10px;
+  grid-template-areas:
+    'Photo'
+    'Details';
   margin-bottom: 30px;
+
+  @include respond-to('tablet') {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0px 10px;
+    grid-template-areas: 'Photo Details';
+  }
 
   .info {
     grid-area: Details;
@@ -79,7 +88,11 @@
     align-items: center;
     display: flex;
     width: 100%;
-    justify-content: flex-end;
+    justify-content: center;
+
+    @include respond-to('tablet') {
+      justify-content: flex-end;
+    }
   }
   .socials {
     display: flex;
@@ -183,6 +196,18 @@
   margin-right: 20px;
   .cardCollectPrice {
     color: var(--background-color);
+  }
+}
+
+// Profile tab filters: 2x2 on phones so 'Not for sale' fits, one row above.
+.filters {
+  display: grid;
+  grid-template-columns: auto auto;
+  width: fit-content;
+  margin: 0 auto;
+
+  @include respond-to('tablet') {
+    display: flex;
   }
 }
 

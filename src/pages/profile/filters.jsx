@@ -1,5 +1,4 @@
 import { Button } from '@atoms/button'
-import { Container } from '@atoms/layout'
 import styles from '@style'
 
 // Tour steps shared by the Creations, Collection and Collabs tabs.
@@ -11,7 +10,7 @@ export const VIEW_MODE_STEP = {
   align: 'right',
 }
 
-function FilterButton({ type, children, isActive, onClick }) {
+function FilterButton({ type, children, count, isActive, onClick }) {
   return (
     <Button
       onClick={() => {
@@ -23,28 +22,34 @@ function FilterButton({ type, children, isActive, onClick }) {
         style={{ textDecoration: isActive ? 'underline' : 'none' }}
       >
         {children}
+        {count !== undefined && (
+          <span style={{ marginLeft: '0.4em', opacity: 0.6 }}>{count}</span>
+        )}
       </div>
     </Button>
   )
 }
 
-export default function Filters({ onChange, filter, items = [] }) {
+// `filterTokens(tokens, type)` is the page's own filter, so counts match the grid.
+export default function Filters({
+  onChange,
+  filter,
+  items = [],
+  tokens,
+  filterTokens,
+}) {
   return (
-    <Container>
-      <div
-        data-tour="filters"
-        style={{ display: 'flex', width: 'fit-content', marginLeft: 'auto' }}
-      >
-        {items.map(({ type, label }) => (
-          <FilterButton
-            key={type}
-            type={type}
-            onClick={onChange}
-            isActive={filter === type}
-            children={label}
-          />
-        ))}
-      </div>
-    </Container>
+    <div data-tour="filters" className={styles.filters}>
+      {items.map(({ type, label }) => (
+        <FilterButton
+          key={type}
+          type={type}
+          onClick={onChange}
+          isActive={filter === type}
+          count={tokens && filterTokens(tokens, type).length}
+          children={label}
+        />
+      ))}
+    </div>
   )
 }

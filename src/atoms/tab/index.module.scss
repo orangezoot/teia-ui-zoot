@@ -52,10 +52,14 @@
   display: flex;
   max-width: 0;
   overflow: hidden;
+  // Room for the "?"'s spinning ring (inset -4px) inside the clip; the
+  // negative margin keeps the row height unchanged.
+  padding: 4px 0;
+  margin: -4px 0;
   opacity: 0;
   visibility: hidden;
-  transition: max-width 0.2s ease-in-out, opacity 0.2s ease-in-out,
-    visibility 0.2s ease-in-out;
+  transition: max-width 0.2s ease-in-out, padding 0.2s ease-in-out,
+    opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
 
   a {
     padding: 0;
@@ -64,6 +68,7 @@
 
   .tab_wrap:hover & {
     max-width: 2em;
+    padding: 4px;
     opacity: 1;
     visibility: visible;
   }
@@ -71,6 +76,7 @@
   @media (hover: none) {
     .tab_wrap:has(.active) & {
       max-width: 2em;
+      padding: 4px;
       opacity: 1;
       visibility: visible;
     }

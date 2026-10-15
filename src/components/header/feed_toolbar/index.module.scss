@@ -29,6 +29,12 @@
   }
 }
 
+// Profiles render only the view-mode toggle; drop the empty 56px rows.
+.toolbar.view_mode_only {
+  grid-template-columns: 1fr;
+  grid-template-areas: 'View-Mode';
+}
+
 .sort_area {
   grid-area: Sort;
   display: flex;
