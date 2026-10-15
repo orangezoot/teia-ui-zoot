@@ -8,6 +8,7 @@ import { useAccountRoles } from '@data/roles'
 import { RoleBadgesView } from '@components/user-badges'
 import { TwitterIcon } from '@icons'
 import { resolveVerifiedBluesky } from '@utils/bsky'
+import { readableText } from '@utils/contrast'
 import styles from './index.module.scss'
 
 const SLIDE_SIZE = 3
@@ -494,6 +495,27 @@ export function parseTags(input) {
   ].slice(0, MAX_TAGS)
 }
 
+// Card background (`card.background`), #rrggbb only: it comes from on-chain
+// metadata, so anything else is ignored.
+export const isCardBackground = (c) =>
+  typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c)
+
+// Card-scoped theme for a custom background: text is a shade of the
+// background at a fixed contrast (see readableText), and borders/tiles are
+// tinted from that text color.
+function backgroundStyle(bg) {
+  const text = readableText(bg)
+  const rgb = [1, 3, 5].map((i) => parseInt(text.slice(i, i + 2), 16)).join()
+  return {
+    background: bg,
+    color: text,
+    '--text-color': text,
+    '--background-color': bg,
+    '--border-color': `rgba(${rgb}, 0.25)`,
+    '--gray-10': `rgba(${rgb}, 0.1)`,
+  }
+}
+
 // Local draft of an artist's card config until the on-chain write lands.
 export const draftKey = (address) => `artist-card:${address}`
 export function readDraft(address) {
@@ -521,13 +543,15 @@ function useBluesky(address, enabled) {
 /**
  * One artist card. `extras` is the batched TzKT / Tezos Domains / DAO data
  * for this address (see useArtistExtras); `show` lists CARD_FIELDS keys;
- * `tags` are the artist's own free-text chips.
+ * `tags` are the artist's own free-text chips; `background` is an optional
+ * #rrggbb card color.
  */
 export default function ArtistCard({
   artist,
   extras = {},
   show = DEFAULT_SHOW,
   tags = [],
+  background,
   hazardFilters = [],
   marketFilter = () => true,
 }) {
@@ -576,7 +600,12 @@ export default function ArtistCard({
   ].filter(Boolean)
 
   return (
-    <div className={styles.card}>
+    <div
+      className={
+        isCardBackground(background) ? styles.card_custom : styles.card
+      }
+      style={isCardBackground(background) ? backgroundStyle(background) : {}}
+    >
       <div className={styles.header}>
         <Identicon
           className={styles.identicon}

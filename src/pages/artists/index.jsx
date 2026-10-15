@@ -312,6 +312,10 @@ export default function ArtistsPage() {
                   tags={
                     readDraft(artist.address)?.tags ?? artist.card?.tags ?? []
                   }
+                  background={
+                    readDraft(artist.address)?.background ??
+                    artist.card?.background
+                  }
                   hazardFilters={hazardFilters}
                   marketFilter={marketFilter}
                 />

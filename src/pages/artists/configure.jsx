@@ -14,6 +14,7 @@ import ArtistCard, {
   DEFAULT_SHOW,
   MAX_TAGS,
   draftKey,
+  isCardBackground,
   parseTags,
   readDraft,
 } from './ArtistCard'
@@ -37,6 +38,7 @@ export default function ConfigureArtistCard() {
   // Raw comma-separated input; parseTags() normalises it for the card/draft.
   const [tagInput, setTagInput] = useState('')
   const [tagLimitHit, setTagLimitHit] = useState(false)
+  const [background, setBackground] = useState(null)
   const [saved, setSaved] = useState(false)
 
   // What this artist actually has linked, so each checkbox can warn when
@@ -68,6 +70,8 @@ export default function ConfigureArtistCard() {
     const card = user.metadata?.data?.card
     setShow(draft?.show ?? card?.show ?? DEFAULT_SHOW)
     setTagInput((draft?.tags ?? card?.tags ?? []).join(', '))
+    const bg = draft ? draft.background : card?.background
+    setBackground(isCardBackground(bg) ? bg : null)
   }, [address, user])
 
   if (error) return <Page title="Customize card">User not found.</Page>
@@ -94,8 +98,15 @@ export default function ConfigureArtistCard() {
     setSaved(false)
     setTagInput(next)
   }
+  const onBackground = (next) => {
+    setSaved(false)
+    setBackground(next)
+  }
   const saveDraft = () => {
-    localStorage.setItem(draftKey(address), JSON.stringify({ show, tags }))
+    localStorage.setItem(
+      draftKey(address),
+      JSON.stringify({ show, tags, background })
+    )
     setSaved(true)
   }
 
@@ -138,6 +149,22 @@ export default function ConfigureArtistCard() {
                   </span>
                 )}
               </label>
+              <div className={styles.configure_background}>
+                <span>Background</span>
+                <input
+                  type="color"
+                  aria-label="Card background color"
+                  value={background ?? '#ffffff'}
+                  onChange={(e) => onBackground(e.target.value)}
+                />
+                {background ? (
+                  <button type="button" onClick={() => onBackground(null)}>
+                    Reset
+                  </button>
+                ) : (
+                  <span className={styles.configure_warn}>theme default</span>
+                )}
+              </div>
               <div className={styles.configure_actions}>
                 <Button shadow_box onClick={saveDraft}>
                   {saved ? 'Saved' : 'Save draft'}
@@ -157,6 +184,7 @@ export default function ConfigureArtistCard() {
                 extras={extras?.[address]}
                 show={show}
                 tags={tags}
+                background={background}
               />
             </div>
           </div>
