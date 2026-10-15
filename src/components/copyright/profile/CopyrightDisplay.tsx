@@ -64,7 +64,12 @@ export default function CopyrightDisplay() {
   if (loading) return <Loading message="Loading copyrights..." />
 
   if (records.length === 0) {
-    return <div className={sharedStyles.emptyState}>No copyright registrations found.</div>
+    return (
+      <div className={sharedStyles.emptyState} data-tour="copyrights">
+        <Tour name="copyrights" steps={TOUR} />
+        No copyright registrations found.
+      </div>
+    )
   }
 
   const nftCount = (entry: CopyrightEntry) => entry.value.related_tezos_nfts.length

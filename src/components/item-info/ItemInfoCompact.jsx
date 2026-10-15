@@ -29,6 +29,10 @@ const ItemInfoCompact = ({ nft }) => {
       : 'X'
     : null
 
+  const artistName = nft.artist_profile?.name
+    ? nft.artist_profile.name
+    : walletPreview(nft.artist_address)
+
   return (
     <div className={`${styles.compact_container} ${styles.masonry}`}>
       {(viewMode === 'single' || (param['id'] && param['*'] === '')) && (
@@ -44,15 +48,14 @@ const ItemInfoCompact = ({ nft }) => {
         activeClass={styles.hide}
         // alt={`Go to artist page of token #${nft.token_id}`}
         alt={`Go to artist page of ${nft.artist_profile?.name}`}
+        title={artistName}
         to={
           nft.artist_profile?.name
             ? `/${encodeURIComponent(nft.artist_profile.name)}`
             : `/tz/${nft.artist_address}`
         }
       >
-        {nft.artist_profile?.name
-          ? nft.artist_profile.name
-          : walletPreview(nft.artist_address)}
+        {artistName}
       </Button>
       <Editions className={styles.editions} nft={nft} />
       <Price price={_price} />

@@ -33,7 +33,7 @@ export default function ProfileChannels() {
 
   if (!userChannels || userChannels.length === 0) {
     return (
-      <div className={styles.empty}>
+      <div className={styles.empty} data-tour="channels">
         <Tour name="channels" steps={TOUR} />
         <p>No channels yet.</p>
         {isOwnProfile && (

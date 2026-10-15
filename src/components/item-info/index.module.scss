@@ -5,7 +5,9 @@
   display: flex;
   align-items: center;
   flex-direction: row;
-  flex-wrap: wrap;
+  // One line: the name truncates instead of pushing editions/price down.
+  flex-wrap: nowrap;
+  gap: 0.5em;
   font-size: var(--font-body);
   justify-content: space-between;
   margin-top: 10px;
@@ -13,8 +15,16 @@
   width: 100%;
   display: flex;
 
+  & > * {
+    flex-shrink: 0;
+  }
+
   .artist {
     //background-color: red;
+    // Block (not the Button's flex) so the ellipsis applies; shrinks first.
+    display: block;
+    flex-shrink: 1;
+    min-width: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

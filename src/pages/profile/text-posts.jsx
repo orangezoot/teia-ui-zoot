@@ -32,7 +32,8 @@ export default function TextPosts() {
 
   if (posts.length === 0) {
     return (
-      <div className={styles.empty}>
+      <div className={styles.empty} data-tour="posts">
+        <Tour name="text" steps={TOUR} />
         <p>
           No text posts yet.
           {isOwnProfile && (

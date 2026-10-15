@@ -35,7 +35,8 @@ export default function ProfileComments() {
 
   if (visibleComments.length === 0) {
     return (
-      <div className={styles.empty}>
+      <div className={styles.empty} data-tour="comments">
+        <Tour name="comments" steps={TOUR} />
         <p>No comments yet.</p>
       </div>
     )
