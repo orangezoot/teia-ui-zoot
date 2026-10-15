@@ -20,6 +20,15 @@ import ArtistCard, {
 } from './ArtistCard'
 import styles from './index.module.scss'
 
+// Socials read from TzKT profiles (`extras.profile`); the artist links or
+// changes them there, not here.
+const TZKT = { name: 'TzKT', href: 'https://profiles.tzkt.io' }
+const LINK_SOURCES = {
+  twitter: TZKT,
+  discord: TZKT,
+  github: TZKT,
+}
+
 /**
  * "Customize my card": pick which profile fields show on your artist card,
  * with a live preview. Saves a local draft for now; the on-chain write goes
@@ -128,10 +137,23 @@ export default function ConfigureArtistCard() {
                     onCheck={() => toggle(f.key)}
                     label={f.label}
                   />
-                  {extras && available[f.key] === false && (
-                    <span className={styles.configure_warn}>
-                      nothing linked
-                    </span>
+                  {extras &&
+                    available[f.key] === false &&
+                    !LINK_SOURCES[f.key] && (
+                      <span className={styles.configure_warn}>
+                        nothing linked
+                      </span>
+                    )}
+                  {extras && LINK_SOURCES[f.key] && (
+                    <a
+                      className={styles.configure_warn}
+                      href={LINK_SOURCES[f.key].href}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {available[f.key] ? 'edit' : 'link'} on{' '}
+                      {LINK_SOURCES[f.key].name}
+                    </a>
                   )}
                 </div>
               ))}
