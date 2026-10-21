@@ -20,13 +20,15 @@ import ArtistCard, {
 } from './ArtistCard'
 import styles from './index.module.scss'
 
-// Socials read from TzKT profiles (`extras.profile`); the artist links or
-// changes them there, not here.
+// Socials are read from elsewhere; the artist links or changes them on the
+// source site, not here. TzKT profiles feed `extras.profile`; Bluesky is the
+// wallet-signed binding made on tzbsky (see utils/bsky).
 const TZKT = { name: 'TzKT', href: 'https://profiles.tzkt.io' }
 const LINK_SOURCES = {
   twitter: TZKT,
   discord: TZKT,
   github: TZKT,
+  bluesky: { name: 'tzbsky', href: 'https://tzbsky.com' },
 }
 
 /**
@@ -144,17 +146,19 @@ export default function ConfigureArtistCard() {
                         nothing linked
                       </span>
                     )}
-                  {extras && LINK_SOURCES[f.key] && (
-                    <a
-                      className={styles.configure_warn}
-                      href={LINK_SOURCES[f.key].href}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {available[f.key] ? 'edit' : 'link'} on{' '}
-                      {LINK_SOURCES[f.key].name}
-                    </a>
-                  )}
+                  {extras &&
+                    LINK_SOURCES[f.key] &&
+                    available[f.key] !== undefined && (
+                      <a
+                        className={styles.configure_warn}
+                        href={LINK_SOURCES[f.key].href}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {available[f.key] ? 'edit' : 'link'} on{' '}
+                        {LINK_SOURCES[f.key].name}
+                      </a>
+                    )}
                 </div>
               ))}
               <label className={styles.configure_tags}>
