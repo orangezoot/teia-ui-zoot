@@ -3,7 +3,7 @@ import useClipboard from 'react-use-clipboard'
 import { Page } from '@atoms/layout'
 import { Button } from '@atoms/button'
 import { Loading } from '@atoms/loading'
-import { Hint } from '@components/tour'
+import Tour, { Hint, TourLink } from '@components/tour'
 import { useCalendarEvents } from '@hooks/use-calendar'
 import { useCalendarRoles } from '@data/calendar-chain'
 import useChainEventEditor from '@components/calendar/useChainEventEditor'
@@ -22,6 +22,38 @@ const SHOW_TTC_KEY = 'calendar:showTtc'
 const DAY_VIEW_KEY = 'calendar:dayView'
 // Matches the page's mobile breakpoint (index.module.scss).
 const MOBILE_QUERY = '(max-width: 600px)'
+
+const CALENDAR_TOUR = [
+  {
+    target: 'bar',
+    text: 'Light bars are one-day events. Dark bars mark where a multi-day event starts and ends.',
+  },
+  {
+    target: 'day',
+    text: 'Click a day to see all its events, or hover a bar and click its ? to jump to that event.',
+  },
+  { target: 'ttc', text: 'Show or hide events from thetezos.com.' },
+  {
+    target: 'subscribe',
+    text: 'Add the calendar to Google, Apple or Outlook.',
+    align: 'right',
+  },
+]
+
+// Mobile Day View has its own controls, so its own tour.
+const DAY_VIEW_TOUR = [
+  { target: 'day-month', text: 'Step through months with the arrows.' },
+  { target: 'day-weeks', text: 'Jump to a week of the month.' },
+  {
+    target: 'day-strip',
+    text: 'Pick a day. The number under each day counts its events.',
+  },
+  {
+    target: 'view-toggle',
+    text: 'Switch back to the full month view.',
+    align: 'right',
+  },
+]
 
 export default function Calendar() {
   const {
@@ -97,6 +129,8 @@ export default function Calendar() {
 
   return (
     <Page title="Teia Calendar">
+      <Tour name="calendar" steps={CALENDAR_TOUR} />
+      <Tour name="dayview" steps={DAY_VIEW_TOUR} />
       <div className={styles.container}>
         {/* Mobile only: the toggle is hidden on desktop, so Hint can't place it.
             Only while it offers Day View, not Month View. */}
@@ -108,10 +142,17 @@ export default function Calendar() {
           />
         )}
         <header className={styles.header}>
-          <h1 className={styles.headline}>Calendar</h1>
+          <h1 className={styles.headline}>
+            Calendar{' '}
+            <TourLink
+              name={dayView && isMobile ? 'dayview' : 'calendar'}
+              title="How the calendar works"
+            />
+          </h1>
           <div className={styles.header_actions}>
             <button
               type="button"
+              data-tour="ttc"
               className={`${styles.ttc_toggle} ${
                 showTtc ? styles.ttc_toggle_on : ''
               }`}
@@ -138,7 +179,7 @@ export default function Calendar() {
               {dayView ? 'Month View' : 'Day View'}
             </button>
             {ICS_URL && (
-              <details className={styles.subscribe}>
+              <details className={styles.subscribe} data-tour="subscribe">
                 <summary className={styles.subscribe_toggle}>Subscribe</summary>
                 <div className={styles.subscribe_panel}>
                   <span className={styles.subscribe_label}>

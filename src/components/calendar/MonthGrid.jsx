@@ -335,6 +335,8 @@ export default function MonthGrid({
                     className={classes}
                     style={gridPos}
                     disabled={!count}
+                    // Tour target; the tour spotlights the first match.
+                    data-tour={count ? 'day' : undefined}
                     onClick={() => openDay(key)}
                     aria-label={`${MONTHS[month]} ${day}, ${count} event${
                       count === 1 ? '' : 's'
@@ -365,6 +367,7 @@ export default function MonthGrid({
                   // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
                   <span
                     key={barKey}
+                    data-tour="bar"
                     onClick={() =>
                       isOpen || HAS_HOVER.matches
                         ? openDay(dayKey)

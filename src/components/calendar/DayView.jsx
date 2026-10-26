@@ -92,7 +92,7 @@ export default function DayView({
 
   return (
     <div className={styles.dayview}>
-      <div className={styles.month_nav}>
+      <div className={styles.month_nav} data-tour="day-month">
         <Button
           small
           secondary
@@ -109,7 +109,12 @@ export default function DayView({
         </Button>
       </div>
 
-      <div className={styles.week_picks} role="group" aria-label="Pick a week">
+      <div
+        className={styles.week_picks}
+        role="group"
+        aria-label="Pick a week"
+        data-tour="day-weeks"
+      >
         {weeks.map(({ key, first, last }) => (
           <button
             key={key}
@@ -126,7 +131,12 @@ export default function DayView({
         ))}
       </div>
 
-      <div className={styles.week_strip} role="group" aria-label="Pick a day">
+      <div
+        className={styles.week_strip}
+        role="group"
+        aria-label="Pick a day"
+        data-tour="day-strip"
+      >
         {days.map((d) => {
           const key = keyOfDate(d)
           const count = byDay[key]?.length || 0
