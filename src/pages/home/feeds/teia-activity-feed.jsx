@@ -196,11 +196,13 @@ export function GlobalActivityFeed() {
 
   return (
     <div className={styles.feed}>
-      <div className={styles.view_toggle}>
+      <div className={styles.view_toggle} role="tablist">
         {VIEWS.map((v) => (
           <button
             key={v.key}
             type="button"
+            role="tab"
+            aria-selected={view === v.key}
             className={`${styles.view_chip} ${
               view === v.key ? styles.view_chip_active : ''
             }`}
