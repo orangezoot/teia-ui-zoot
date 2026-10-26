@@ -6,8 +6,8 @@ import CalendarEventCard from './CalendarEventCard'
 import styles from '@style'
 import tourStyles from '@components/tour/index.module.scss'
 
-const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-const MONTHS = [
+export const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+export const MONTHS = [
   'January',
   'February',
   'March',
@@ -23,7 +23,7 @@ const MONTHS = [
 ]
 
 const pad = (n) => String(n).padStart(2, '0')
-const keyOf = (y, m, d) => `${y}-${pad(m + 1)}-${pad(d)}`
+export const keyOf = (y, m, d) => `${y}-${pad(m + 1)}-${pad(d)}`
 
 // Visual Calendar update for testing purpose
 // Max event bars shown per day before collapsing the rest into a "+N" marker.
@@ -43,7 +43,7 @@ const MULTI_DAY_COLOR = 'var(--gray-100)'
  * Bucket events by day key (YYYY-MM-DD). Multi-day events (endDate after
  * startDate) appear on every day they span, capped at 31 days.
  */
-function eventsByDay(events) {
+export function eventsByDay(events) {
   const map = {}
   for (const ev of events) {
     if (!ev.startDate) continue

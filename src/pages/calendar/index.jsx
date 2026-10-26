@@ -3,10 +3,12 @@ import useClipboard from 'react-use-clipboard'
 import { Page } from '@atoms/layout'
 import { Button } from '@atoms/button'
 import { Loading } from '@atoms/loading'
+import { Hint } from '@components/tour'
 import { useCalendarEvents } from '@hooks/use-calendar'
 import { useCalendarRoles } from '@data/calendar-chain'
 import useChainEventEditor from '@components/calendar/useChainEventEditor'
 import MonthGrid from '@components/calendar/MonthGrid'
+import DayView from '@components/calendar/DayView'
 import styles from '@style'
 
 /**
@@ -17,6 +19,9 @@ import styles from '@style'
  * WordPress events are merged in read-only.
  */
 const SHOW_TTC_KEY = 'calendar:showTtc'
+const DAY_VIEW_KEY = 'calendar:dayView'
+// Matches the page's mobile breakpoint (index.module.scss).
+const MOBILE_QUERY = '(max-width: 600px)'
 
 export default function Calendar() {
   const {
@@ -36,6 +41,28 @@ export default function Calendar() {
   useEffect(() => {
     window.localStorage.setItem(SHOW_TTC_KEY, showTtc ? '1' : '0')
   }, [showTtc])
+
+  // Opt-in single-day view, mobile only.
+  const [dayView, setDayView] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.localStorage.getItem(DAY_VIEW_KEY) === '1'
+  })
+  useEffect(() => {
+    window.localStorage.setItem(DAY_VIEW_KEY, dayView ? '1' : '0')
+  }, [dayView])
+  // Points at the view toggle on every visit until closed or used.
+  const [hintClosed, setHintClosed] = useState(false)
+
+  const [isMobile, setIsMobile] = useState(
+    () =>
+      typeof window !== 'undefined' && window.matchMedia(MOBILE_QUERY).matches
+  )
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_QUERY)
+    const onChange = () => setIsMobile(mq.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
 
   const events = useMemo(
     () => (showTtc ? allEvents : allEvents.filter((e) => e.source !== 'wp')),
@@ -71,6 +98,15 @@ export default function Calendar() {
   return (
     <Page title="Teia Calendar">
       <div className={styles.container}>
+        {/* Mobile only: the toggle is hidden on desktop, so Hint can't place it.
+            Only while it offers Day View, not Month View. */}
+        {isMobile && !dayView && !hintClosed && (
+          <Hint
+            target="view-toggle"
+            title="Try on Mobile"
+            onClose={() => setHintClosed(true)}
+          />
+        )}
         <header className={styles.header}>
           <h1 className={styles.headline}>Calendar</h1>
           <div className={styles.header_actions}>
@@ -88,6 +124,18 @@ export default function Calendar() {
               }
             >
               thetezos.com events
+            </button>
+            <button
+              type="button"
+              className={`${styles.ttc_toggle} ${styles.day_toggle}`}
+              data-tour="view-toggle"
+              onClick={() => {
+                setDayView((v) => !v)
+                setHintClosed(true)
+              }}
+            >
+              {/* Names the view this switches to. */}
+              {dayView ? 'Month View' : 'Day View'}
             </button>
             {ICS_URL && (
               <details className={styles.subscribe}>
@@ -130,7 +178,13 @@ export default function Calendar() {
               </details>
             )}
             {!isEditing && (
-              <Button shadow_box fit onClick={startCreate} disabled={opening}>
+              <Button
+                shadow_box
+                fit
+                className={styles.propose}
+                onClick={startCreate}
+                disabled={opening}
+              >
                 {opening
                   ? 'Opening…'
                   : canModerate
@@ -141,17 +195,26 @@ export default function Calendar() {
           </div>
         </header>
 
-        {/* Month grid: click a day to view its events in a popup. */}
-        {!isLoading && (
-          <MonthGrid
-            events={events}
-            {...cardHandlers}
-            /* Only offer to load more TTC events when they are being shown. */
-            horizon={showTtc ? horizon : ''}
-            extending={extending}
-            onExtendHorizon={extendHorizon}
-          />
-        )}
+        {/* Month grid (or opt-in day view on mobile): pick a day to see its events. */}
+        {!isLoading &&
+          (dayView && isMobile ? (
+            <DayView
+              events={events}
+              {...cardHandlers}
+              horizon={showTtc ? horizon : ''}
+              extending={extending}
+              onExtendHorizon={extendHorizon}
+            />
+          ) : (
+            <MonthGrid
+              events={events}
+              {...cardHandlers}
+              /* Only offer to load more TTC events when they are being shown. */
+              horizon={showTtc ? horizon : ''}
+              extending={extending}
+              onExtendHorizon={extendHorizon}
+            />
+          ))}
 
         {editorModal}
 

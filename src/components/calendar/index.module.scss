@@ -294,6 +294,103 @@
   padding: var(--spacing, 1rem);
 }
 
+/* --------------------------------------------------------- day view --- */
+.week_picks {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.week_pick {
+  padding: 2px 6px;
+  border: 1px solid var(--border-color);
+  background: none;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: var(--font-size-small);
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--text-color);
+    outline-offset: 2px;
+  }
+}
+
+.week_pick_selected {
+  color: var(--text-color);
+  border-color: var(--text-color);
+  font-weight: 700;
+}
+
+.week_strip {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: var(--spacing, 1rem);
+}
+
+.week_day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding: 4px 0;
+  border: 1px solid transparent;
+  background: none;
+  color: var(--text-color);
+  font-family: inherit;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--text-color);
+    outline-offset: 2px;
+  }
+}
+
+.week_day_name {
+  font-size: var(--font-size-small);
+  color: var(--text-secondary);
+}
+
+.week_day_today {
+  border-color: var(--text-secondary);
+
+  .day_number {
+    font-weight: 700;
+  }
+}
+
+.week_day_selected {
+  border-color: var(--text-color);
+  background: var(--gray-15);
+
+  .day_number {
+    font-weight: 700;
+  }
+}
+
+// Event count; keeps its line height when empty so days line up.
+.week_day_count {
+  min-height: 1.2em;
+  font-size: var(--font-size-small);
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.day_title {
+  font-size: var(--font-size);
+  font-weight: 600;
+  margin-bottom: var(--spacing, 1rem);
+}
+
+.dayview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-half, 0.5rem);
+}
+
 /* -------------------------------------------------- previous events --- */
 .prev {
   margin-top: var(--spacing, 1rem);
