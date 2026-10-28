@@ -75,6 +75,10 @@ export default function Tour({ name, steps }) {
   if (!active || !rect) return null
 
   const viewport = document.documentElement.clientHeight
+  // Kept on screen, so it may sit left of the target: shift the arrow to
+  // still point at it (12px is its resting offset, see .pop::before).
+  const left = Math.max(16, Math.min(rect.left - PAD, window.innerWidth - 296))
+  const arrow = Math.min(rect.left - PAD - left + 12, 256)
 
   return (
     <>
@@ -107,12 +111,7 @@ export default function Tour({ name, steps }) {
                   document.documentElement.clientWidth - rect.right - PAD
                 ),
               }
-            : {
-                left: Math.max(
-                  16,
-                  Math.min(rect.left - PAD, window.innerWidth - 296)
-                ),
-              }),
+            : { left, '--arrow-left': `${arrow}px` }),
         }}
       >
         <button
@@ -149,8 +148,9 @@ export default function Tour({ name, steps }) {
 /**
  * Standalone callout under the element marked `data-tour="<target>"`, its
  * arrow pointing up at it (right-aligned). No spotlight, no steps.
+ * `children` (e.g. buttons) go in an actions row under the title.
  */
-export function Hint({ target, title, onClose }) {
+export function Hint({ target, title, onClose, children }) {
   const [rect, setRect] = useState(null)
 
   useEffect(() => {
@@ -191,6 +191,7 @@ export function Hint({ target, title, onClose }) {
         <CloseIcon fill="var(--text-color)" width="10" />
       </button>
       <p>{title}</p>
+      {children && <div className={styles.actions}>{children}</div>}
     </div>
   )
 }
