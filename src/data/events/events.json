@@ -1,24 +1,6 @@
 {
   "events": [
     {
-      "id": "tan-tan",
-      "title": "Tan-Tan",
-      "subtitle": "Digital art project",
-      "description": "A digital art project and event website.",
-      "link": "https://tan-tan.art/",
-      "screenshot": "/events/tan-tan.png",
-      "bannerColor": "#000000"
-    },
-    {
-      "id": "malicious-sheep",
-      "title": "Malicious Sheep",
-      "subtitle": "Digital art project",
-      "description": "A digital art project website.",
-      "link": "https://malicioussheep.art/",
-      "screenshot": "/events/malicioussheep.png",
-      "bannerColor": "#f0f0f0"
-    },
-    {
       "id": "byob-mx-teia",
       "title": "BYOB mx TEIA",
       "subtitle": "Digital art exhibition + NFT drop",
@@ -116,15 +98,6 @@
       "link": "https://teia.art/",
       "screenshot": "/events/teia.png",
       "bannerColor": "#101010"
-    },
-    {
-      "id": "bitcointalk",
-      "title": "BitcoinTalk",
-      "subtitle": "Crypto community forum",
-      "description": "A long-running discussion forum for the cryptocurrency community.",
-      "link": "https://bitcointalk.org/",
-      "screenshot": "/events/bitcointalk.png",
-      "bannerColor": "#e0e0e0"
     }
   ]
 }
