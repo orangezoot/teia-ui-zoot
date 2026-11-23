@@ -206,6 +206,8 @@ const router = createBrowserRouter(
           <Route path="friends/:address" element={<FriendsFeed />} />
         </Route>
         <Route path="search/*" element={<Home isSearch />} />
+        {/* Outranks the profile's ":name/curations", which would read "search" as a SUBJKT. */}
+        <Route path="search/curations" element={<Home isSearch />} />
 
         <Route path="kt/:address" element={<Display />}>
           <Route index element={<CollabDisplay />} />

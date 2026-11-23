@@ -3,13 +3,13 @@ import {
   createSearchParams,
   useLocation,
   useNavigate,
-  useParams,
   useSearchParams,
 } from 'react-router-dom'
 import { Input } from '@atoms/input'
 import { Tabs } from '@atoms/tab'
 import Tour, { TourLink } from '@components/tour'
 import { useEvents } from '@hooks/use-events'
+import { useCurationSearch } from '@data/curations'
 import {
   filterEvents,
   useArtistCount,
@@ -23,6 +23,7 @@ import * as FEEDS from './feeds'
 import UserSearchResults from './user-search-results'
 import ArtistsSearchResults from './artists-search-results'
 import EventsSearchResults from './events-search-results'
+import CurationsSearchResults from './curations-search-results'
 
 const SEARCH_TOUR = [
   { target: 'search', text: 'Type a search term and press Enter.' },
@@ -54,7 +55,8 @@ export default function Search() {
   const [searchTerm, setSearchTerm] = useState(term)
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const tab = useParams()['*'] || ''
+  // From the path, not the splat: /search/curations has its own route.
+  const tab = pathname.replace(/^\/search\/?/, '')
 
   const [filters, setFilters] = useState(EMPTY_FILTERS)
   const [boolExp, setBoolExp] = useState({})
@@ -77,6 +79,11 @@ export default function Search() {
   const { events, isLoading: eventsLoading } = useEvents()
   const eventCount =
     term && !eventsLoading ? filterEvents(events, term).length : undefined
+  const curationSearch = useCurationSearch(term)
+  const curationCount =
+    term && !curationSearch.isLoading && !curationSearch.error
+      ? curationSearch.results.length
+      : undefined
 
   const search = term ? `?${createSearchParams({ term })}` : ''
   const tabs = [
@@ -88,6 +95,7 @@ export default function Search() {
       count: isLagging ? undefined : users?.length,
     },
     { path: 'events', label: 'Events', count: eventCount },
+    { path: 'curations', label: 'Curations', count: curationCount },
   ].map(({ path, label, count }) => ({
     title: withCount(label, count),
     to: { pathname: path ? `/search/${path}` : '/search', search },
@@ -160,6 +168,7 @@ export default function Search() {
           )}
           {tab === 'users' && <UserSearchResults />}
           {tab === 'events' && <EventsSearchResults term={term} />}
+          {tab === 'curations' && <CurationsSearchResults term={term} />}
         </>
       )}
     </>
