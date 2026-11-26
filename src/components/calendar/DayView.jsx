@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Button } from '@atoms/button'
+import { teiaRank } from '@data/calendar-chain'
 import { MONTHS, WEEKDAYS, eventsByDay, keyOf } from './MonthGrid'
 import CalendarEventCard from './CalendarEventCard'
 import styles from '@style'
@@ -81,11 +82,9 @@ export default function DayView({
     setSelected(isThisMonth ? today : d)
   }
 
-  // Teia events first
+  // Teia main events first, then other on-chain events
   const dayEvents = [...(byDay[selectedKey] || [])].sort(
-    (a, b) =>
-      Number(b.source === 'chain' || !!b.teia_event) -
-      Number(a.source === 'chain' || !!a.teia_event)
+    (a, b) => teiaRank(b) - teiaRank(a)
   )
 
   const pastHorizon = Boolean(horizon) && selectedKey > horizon

@@ -142,6 +142,7 @@ export default function useChainEventEditor({ onMutate } = {}) {
           channels: Array.isArray(doc.channels) ? doc.channels : [],
           collabs: Array.isArray(doc.collabs) ? doc.collabs : [],
           recurrence: doc.recurrence,
+          teia_event: doc.teia_event === true,
         },
         eventId: event.eventId,
         propose,
@@ -187,6 +188,7 @@ export default function useChainEventEditor({ onMutate } = {}) {
       tags: values.tags || [],
       channels: values.channels || [],
       collabs: values.collabs || [],
+      teia_event: Boolean(values.teia_event),
     }
     try {
       if (eventId == null) {
@@ -266,6 +268,7 @@ export default function useChainEventEditor({ onMutate } = {}) {
               onValuesChange={persistDraft}
               takenSlugs={takenSlugs}
               currentEventId={editing.eventId}
+              canMarkTeiaEvent={!editing.propose}
               onUploadImage={async (file) => ({
                 url: await uploadEventImage(file),
               })}

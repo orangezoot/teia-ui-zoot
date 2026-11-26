@@ -56,6 +56,7 @@ export interface EventDocInput {
   tags?: string[]
   channels?: CalendarChannelRef[]
   collabs?: CalendarCollabRef[]
+  teia_event?: boolean
 }
 
 /** Build the IPFS event document (the content the CID points at). */
@@ -83,6 +84,7 @@ export function buildEventDocument(
     ...(input.tags?.length ? { tags: input.tags } : {}),
     ...(input.channels?.length ? { channels: input.channels } : {}),
     ...(input.collabs?.length ? { collabs: input.collabs } : {}),
+    ...(input.teia_event ? { teia_event: true } : {}),
   }
 }
 

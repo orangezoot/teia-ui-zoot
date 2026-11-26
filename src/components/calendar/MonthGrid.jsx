@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '@atoms/button'
+import { teiaRank } from '@data/calendar-chain'
 import { eventColorHex } from '@data/calendar-chain/colors'
 import { localDayKey } from '@utils/datetime'
 import CalendarEventCard from './CalendarEventCard'
@@ -107,11 +108,10 @@ function layoutBars(events, year, month, startOffset, daysInMonth) {
     }
   }
 
-  // Teia events are packed first
-  const isTeia = (sp) => sp.ev.source === 'chain' || !!sp.ev.teia_event
+  // Teia main events are packed first, then other on-chain events
   spans.sort(
     (a, b) =>
-      Number(isTeia(b)) - Number(isTeia(a)) ||
+      teiaRank(b.ev) - teiaRank(a.ev) ||
       a.startCell - b.startCell ||
       b.endCell - b.startCell - (a.endCell - a.startCell)
   )
@@ -265,11 +265,9 @@ export default function MonthGrid({
     if (e.target === dialogRef.current) closeDialog()
   }
 
-  // Teia events first
+  // Teia main events first, then other on-chain events
   const selectedEvents = [...((selected && byDay[selected]) || [])].sort(
-    (a, b) =>
-      Number(b.source === 'chain' || !!b.teia_event) -
-      Number(a.source === 'chain' || !!a.teia_event)
+    (a, b) => teiaRank(b) - teiaRank(a)
   )
   const selectedLabel = selected
     ? new Date(`${selected}T00:00:00`).toLocaleDateString(undefined, {

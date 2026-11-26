@@ -55,6 +55,9 @@ export interface CalendarEventContent {
   tags?: string[]
   channels?: CalendarChannelRef[]
   collabs?: CalendarCollabRef[]
+  /** Teia main event: shown with the Teia logo and listed first. Set by
+   * moderators only (content writes are moderator-only on-chain). */
+  teia_event?: boolean
 }
 
 /** Current state of an on-chain event, joined from the events + versions bigmaps. */
@@ -104,6 +107,8 @@ export interface CalendarFeedEvent {
   tags: string[]
   channels: CalendarChannelRef[]
   collabs: CalendarCollabRef[]
+  /** Teia main event (see CalendarEventContent.teia_event). */
+  teia_event: boolean
   createdBy: string
   createdAt: string
   updatedAt: string
