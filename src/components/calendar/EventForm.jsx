@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, Suspense } from 'react'
 import useSWR from 'swr'
 import { Button } from '@atoms/button'
+import { Checkbox } from '@atoms/input'
 import { Identicon } from '@atoms/identicons'
 import { useLocalSettings } from '@context/localSettingsStore'
 import { useUserStore } from '@context/userStore'
@@ -99,6 +100,7 @@ export default function EventForm({
   onValuesChange,
   takenSlugs,
   currentEventId,
+  canMarkTeiaEvent = false,
 }) {
   const [values, setValues] = useState(() => ({ ...blankEvent(), ...initial }))
   const [saving, setSaving] = useState(false)
@@ -712,6 +714,29 @@ export default function EventForm({
           {values.color ? capitalize(values.color) : 'Pick a color'}
         </p>
       </div>
+
+      {/* Moderators only; otherwise the existing value carries over unchanged. */}
+      {canMarkTeiaEvent && (
+        <div className={styles.field}>
+          <Checkbox
+            checked={Boolean(values.teia_event)}
+            onCheck={(on) => setValues((v) => ({ ...v, teia_event: on }))}
+            label={
+              <span>
+                <img
+                  src="/teia-frame.svg"
+                  alt=""
+                  className={styles.teia_mark}
+                />
+                Teia main event
+              </span>
+            }
+          />
+          <p className={styles.color_selected}>
+            Shows the Teia logo and lists the event first.
+          </p>
+        </div>
+      )}
 
       {revealed.has('location') && (
         <div

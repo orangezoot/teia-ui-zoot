@@ -101,6 +101,21 @@ function ProposalsPanel() {
 
   const filtered = (proposals ?? []).filter((p) => p.status === status)
 
+  // Flag proposals that add or remove the moderator-only Teia main event mark
+  // (a holder can write the flag into a proposal document by hand).
+  const { data: liveEvents } = useModeratableEvents(true)
+  const teiaChange = (p) => {
+    // An edit can only be compared once the live events have loaded.
+    if (!p.isNewEvent && !liveEvents) return null
+    const proposed = p.doc?.teia_event === true
+    const current =
+      !p.isNewEvent &&
+      Boolean(liveEvents?.find((ev) => ev.eventId === p.eventId)?.teia_event)
+    if (proposed && !current) return 'Marks this as a Teia main event'
+    if (!proposed && current) return 'Removes the Teia main event mark'
+    return null
+  }
+
   // Aliases for proposer + resolver addresses shown in the queue.
   const { data: profiles } = useUserProfiles(
     (proposals ?? []).flatMap((p) => [p.proposer, p.resolvedBy].filter(Boolean))
@@ -177,6 +192,11 @@ function ProposalsPanel() {
                 </div>
               )}
             </div>
+            {teiaChange(p) && (
+              <p className={styles.queue_meta} role="note">
+                <strong>⚠ {teiaChange(p)}</strong>
+              </p>
+            )}
             {/* Full proposed content — moderators see what they approve. */}
             {p.doc ? (
               <CalendarEventCard

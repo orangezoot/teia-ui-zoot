@@ -95,6 +95,15 @@ function expansionWindow() {
 }
 
 /**
+ * Display priority for the calendar views: Teia main events first, then other
+ * on-chain events, then external (WordPress / TTC) events.
+ */
+export function teiaRank(ev: { teia_event?: boolean; source?: string }) {
+  if (ev.teia_event) return 2
+  return ev.source === 'chain' ? 1 : 0
+}
+
+/**
  * Map a raw IPFS event document onto the shape CalendarEventCard renders, so
  * the moderator queue can show a proposal's full content (with the same link/
  * image sanitizing as the live feed) before approving it.
@@ -123,6 +132,7 @@ export function docToDisplayEvent(
     tags: doc.tags ?? [],
     channels: safeChannels(doc.channels),
     collabs: safeCollabs(doc.collabs),
+    teia_event: doc.teia_event === true,
   }
 }
 
@@ -153,6 +163,7 @@ function baseFeedEvent(e: ChainEvent, c: CalendarEventContent) {
     tags: c.tags ?? [],
     channels: safeChannels(c.channels),
     collabs: safeCollabs(c.collabs),
+    teia_event: c.teia_event === true,
     createdBy: c.author || '',
     createdAt: e.createdAt || '',
     updatedAt: e.updatedAt || '',
