@@ -321,7 +321,7 @@ export default function NewPost() {
         </div>
       )}
 
-      <div className={styles.field}>
+      <div className={styles.field} data-tour="text-title">
         <label htmlFor="title">Title</label>
         <Input
           id="title"
@@ -333,7 +333,7 @@ export default function NewPost() {
         />
       </div>
 
-      <div className={styles.field}>
+      <div className={styles.field} data-tour="text-content">
         <label htmlFor="content">Content</label>
         <div
           className={styles.editor_wrapper}
@@ -379,7 +379,7 @@ export default function NewPost() {
         )}
       </div>
 
-      <div className={styles.field}>
+      <div className={styles.field} data-tour="text-tags">
         <label htmlFor="tags">Tags</label>
         <Input
           id="tags"
@@ -393,7 +393,7 @@ export default function NewPost() {
         </small>
       </div>
 
-      <div className={styles.field_row}>
+      <div className={styles.field_row} data-tour="text-editions">
         <div className={styles.field}>
           <label htmlFor="editions">Editions</label>
           <Input
@@ -421,7 +421,7 @@ export default function NewPost() {
         </div>
       </div>
 
-      <div className={styles.field}>
+      <div className={styles.field} data-tour="text-license">
         <label htmlFor="license">License</label>
         <select
           id="license"
@@ -449,6 +449,7 @@ export default function NewPost() {
           type="submit"
           disabled={isSubmitting || !content.trim()}
           shadow_box
+          data-tour="text-mint"
         >
           {isSubmitting ? 'Minting...' : 'Mint Post'}
         </Button>

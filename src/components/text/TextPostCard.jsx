@@ -25,7 +25,7 @@ function getExcerpt(text, maxLength = 200) {
   return cleaned.slice(0, maxLength).trim() + '...'
 }
 
-export function TextPostCard({ nft, showBurn = false }) {
+export function TextPostCard({ nft, showBurn = false, tourTarget }) {
   const [showConfirm, setShowConfirm] = useState(false)
   const [isBurning, setIsBurning] = useState(false)
   const [burnAmount, setBurnAmount] = useState(1)
@@ -112,7 +112,7 @@ export function TextPostCard({ nft, showBurn = false }) {
   }
 
   return (
-    <article className={styles.card}>
+    <article className={styles.card} data-tour={tourTarget}>
       <div className={styles.card_content}>
         <div className={styles.link}>
           {coverUrl && (

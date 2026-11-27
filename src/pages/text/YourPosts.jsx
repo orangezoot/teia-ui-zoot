@@ -43,8 +43,13 @@ export default function YourPosts() {
 
   return (
     <div className={styles.posts_list}>
-      {posts.map((nft) => (
-        <TextPostCard key={nft.token_id} nft={nft} showBurn />
+      {posts.map((nft, i) => (
+        <TextPostCard
+          key={nft.token_id}
+          nft={nft}
+          tourTarget={i === 0 ? 'text-post' : undefined}
+          showBurn
+        />
       ))}
     </div>
   )
