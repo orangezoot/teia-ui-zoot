@@ -9,7 +9,7 @@ import {
 import CurationCover from './CurationCover'
 import styles from '@style'
 
-export default function CurationCard({ curation }) {
+export default function CurationCard({ curation, tourTarget }) {
   const { data: content } = useCurationContent(curation.cid)
   const [coverFailed, setCoverFailed] = useState(false)
 
@@ -33,7 +33,11 @@ export default function CurationCard({ curation }) {
   const fallbackThumb = thumb || firstThumb
 
   return (
-    <Link className={styles.card} to={`${PATH.CURATIONS}/${curation.id}`}>
+    <Link
+      className={styles.card}
+      to={`${PATH.CURATIONS}/${curation.id}`}
+      data-tour={tourTarget}
+    >
       {showCover ? (
         <CurationCover
           className={styles.cover}

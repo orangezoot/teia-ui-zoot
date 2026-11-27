@@ -29,6 +29,7 @@ import RelatedPicker from '@components/calendar/RelatedPicker'
 import TokenPicker from './TokenPicker'
 import SelectedTray from './SelectedTray'
 import CurationCover from './CurationCover'
+import Tour, { TourLink } from '@components/tour'
 import styles from '@style'
 
 const tezToMutez = (tez) => {
@@ -72,6 +73,49 @@ const parseEventDate = (s) =>
   !s ? NaN : Date.parse(/^\d{4}-\d{2}-\d{2}$/.test(s) ? `${s}T00:00:00` : s)
 
 const COVER_UPLOAD_ENABLED = false
+
+const EDITOR_TOUR = [
+  {
+    target: 'curation-title',
+    text: 'Name your curation. A title is the only thing you need to create one.',
+  },
+  {
+    target: 'curation-description',
+    text: 'Tell people what this curation is about.',
+  },
+  {
+    target: 'curation-add',
+    text: 'Search for OBJKTs and click them to add them to your curation.',
+  },
+  {
+    target: 'curation-selected',
+    text: 'Everything you picked. Reorder or remove tokens here.',
+  },
+  {
+    target: 'curation-cover',
+    text: 'Pick which of your selected tokens is the cover. The first one is used until you choose.',
+  },
+  {
+    target: 'curation-tags',
+    text: 'Tags help people find your curation in search.',
+  },
+  {
+    target: 'curation-channels',
+    text: 'Link channels related to this curation.',
+  },
+  {
+    target: 'curation-events',
+    text: 'Link calendar events related to this curation.',
+  },
+  {
+    target: 'curation-fee',
+    text: 'Optionally add a curation fee on top of the normal sale price. Use one fee for every token or one per token, in tez or as a percentage.',
+  },
+  {
+    target: 'curation-submit',
+    text: 'Save your curation on Tezos. The cost is shown just above, and your wallet will ask you to confirm.',
+  },
+]
 
 export default function CurationEditor() {
   const { id } = useParams()
@@ -468,18 +512,27 @@ export default function CurationEditor() {
   return (
     <Page title={isEdit ? 'Edit curation' : 'New curation'}>
       <Container>
-        <h1>{isEdit ? 'Edit curation' : 'New curation'}</h1>
+        <Tour name="curation-editor" steps={EDITOR_TOUR} />
+        <h1>
+          {isEdit ? 'Edit curation' : 'New curation'}{' '}
+          <TourLink
+            name="curation-editor"
+            title="How making a curation works"
+          />
+        </h1>
 
         <div className={styles.editor}>
-          <Input
-            type="text"
-            label="Title"
-            placeholder="Curation title"
-            value={title}
-            onChange={(v) => setTitle(typeof v === 'string' ? v : '')}
-          />
+          <div data-tour="curation-title">
+            <Input
+              type="text"
+              label="Title"
+              placeholder="Curation title"
+              value={title}
+              onChange={(v) => setTitle(typeof v === 'string' ? v : '')}
+            />
+          </div>
 
-          <div>
+          <div data-tour="curation-description">
             <span className={styles.field_label}>Description</span>
             <textarea
               className={styles.textarea}
@@ -489,12 +542,12 @@ export default function CurationEditor() {
             />
           </div>
 
-          <div>
+          <div data-tour="curation-add">
             <span className={styles.field_label}>Add tokens</span>
             <TokenPicker selectedKeys={selectedKeys} onToggle={toggleToken} />
           </div>
 
-          <div>
+          <div data-tour="curation-selected">
             <span className={styles.field_label}>
               Selected ({selected.length})
             </span>
@@ -508,7 +561,7 @@ export default function CurationEditor() {
             />
           </div>
 
-          <div>
+          <div data-tour="curation-cover">
             <span className={styles.field_label}>Cover (optional)</span>
             {coverImage ? (
               <CurationCover
@@ -583,7 +636,7 @@ export default function CurationEditor() {
             )}
           </div>
 
-          <div>
+          <div data-tour="curation-tags">
             <span className={styles.field_label}>Tags (optional, max 20)</span>
             <Input
               type="text"
@@ -593,7 +646,7 @@ export default function CurationEditor() {
             />
           </div>
 
-          <div>
+          <div data-tour="curation-channels">
             <span className={styles.field_label}>Channels (optional)</span>
             <div className={styles.section_actions}>
               <Button
@@ -645,7 +698,7 @@ export default function CurationEditor() {
             )}
           </div>
 
-          <div>
+          <div data-tour="curation-events">
             <span className={styles.field_label}>
               Calendar events (optional)
             </span>
@@ -699,7 +752,7 @@ export default function CurationEditor() {
             )}
           </div>
 
-          <div>
+          <div data-tour="curation-fee">
             <span className={styles.field_label}>Curation fee</span>
             <div className={styles.fee_row}>
               <div className={styles.seg} role="group" aria-label="Fee mode">
@@ -793,6 +846,7 @@ export default function CurationEditor() {
               shadow_box
               disabled={!title.trim() || submitting}
               onClick={onSubmit}
+              data-tour="curation-submit"
             >
               {submitting
                 ? 'Saving…'

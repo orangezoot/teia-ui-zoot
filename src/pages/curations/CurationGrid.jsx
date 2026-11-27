@@ -10,8 +10,12 @@ export default function CurationGrid({
   }
   return (
     <div className={styles.grid}>
-      {curations.map((curation) => (
-        <CurationCard key={curation.id} curation={curation} />
+      {curations.map((curation, i) => (
+        <CurationCard
+          key={curation.id}
+          curation={curation}
+          tourTarget={i === 0 ? 'curations-card' : undefined}
+        />
       ))}
     </div>
   )

@@ -10,9 +10,29 @@ import {
   useCurationRoles,
 } from '@data/curations'
 import { useUserStore } from '@context/userStore'
+import Tour, { TourLink } from '@components/tour'
 import CurationGrid from './CurationGrid'
 import MigrationNotice from './MigrationNotice'
 import styles from '@style'
+
+const CURATIONS_TOUR = [
+  {
+    target: 'curations-new',
+    text: 'Make your own curation: a hand-picked set of OBJKTs with a title and cover.',
+  },
+  {
+    target: 'curations-search',
+    text: 'Search curations by title, tag or artist.',
+  },
+  {
+    target: 'curations-sort',
+    text: 'Show the latest curations first, or the oldest.',
+  },
+  {
+    target: 'curations-card',
+    text: 'Open a curation to browse its OBJKTs. Curations with music can also be played as a playlist.',
+  },
+]
 
 export default function CurationsHome() {
   const [order, setOrder] = useState('desc')
@@ -32,11 +52,18 @@ export default function CurationsHome() {
 
   return (
     <Page title="Curations">
+      <Tour name="curations" steps={CURATIONS_TOUR} />
       <Container>
         <div className={styles.header}>
-          <h1>Curations</h1>
+          <h1>
+            Curations <TourLink name="curations" title="How curations work" />
+          </h1>
           {roles?.canCreate && (
-            <Button shadow_box to={`${PATH.CURATIONS}/create`}>
+            <Button
+              shadow_box
+              to={`${PATH.CURATIONS}/create`}
+              data-tour="curations-new"
+            >
               New curation
             </Button>
           )}
@@ -45,15 +72,22 @@ export default function CurationsHome() {
         <MigrationNotice address={address} />
 
         <div className={styles.toolbar}>
-          <Input
-            type="text"
-            placeholder="Search title, tag, artist…"
-            value={query}
-            onChange={(v) =>
-              setQuery(typeof v === 'string' ? v : v?.target?.value || '')
-            }
-          />
-          <div className={styles.seg} role="group" aria-label="Sort order">
+          <div data-tour="curations-search">
+            <Input
+              type="text"
+              placeholder="Search title, tag, artist…"
+              value={query}
+              onChange={(v) =>
+                setQuery(typeof v === 'string' ? v : v?.target?.value || '')
+              }
+            />
+          </div>
+          <div
+            className={styles.seg}
+            role="group"
+            aria-label="Sort order"
+            data-tour="curations-sort"
+          >
             <button
               type="button"
               className={`${styles.seg_btn} ${
