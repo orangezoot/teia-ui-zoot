@@ -816,31 +816,37 @@ Any modification to this Agreement's terms requires explicit consent from both t
         <br />
         <h3>📝 Clauses</h3>
         <br />
-        {propertiesWithCheckboxes.map((clauseName) => (
-          <div style={{ display: 'flex' }} key={clauseName}>
-            <Checkbox
-              key={clauseName}
-              name={clauseName}
-              label={clauseLabels[clauseName]}
-              checked={clauses[clauseName]}
-              onCheck={(checked) => handleChange(checked, clauseName)}
-              disabled={
-                clauses.releasePublicDomain &&
-                clauseName !== 'releasePublicDomain'
-              }
-            />
-            <span
-              role="button"
-              tabIndex={0}
-              className={styles.modalInfoIcon}
-              onClick={() => handleModalOpen(clauseName)}
-              onKeyPress={(event) => handleKeyPress(event, clauseName)}
-            >
-              (?)
-            </span>
-          </div>
-        ))}
-        <div className="select-container" style={{ marginTop: '2em' }}>
+        <div data-tour="copyright-clauses">
+          {propertiesWithCheckboxes.map((clauseName) => (
+            <div style={{ display: 'flex' }} key={clauseName}>
+              <Checkbox
+                key={clauseName}
+                name={clauseName}
+                label={clauseLabels[clauseName]}
+                checked={clauses[clauseName]}
+                onCheck={(checked) => handleChange(checked, clauseName)}
+                disabled={
+                  clauses.releasePublicDomain &&
+                  clauseName !== 'releasePublicDomain'
+                }
+              />
+              <span
+                role="button"
+                tabIndex={0}
+                className={styles.modalInfoIcon}
+                onClick={() => handleModalOpen(clauseName)}
+                onKeyPress={(event) => handleKeyPress(event, clauseName)}
+              >
+                (?)
+              </span>
+            </div>
+          ))}
+        </div>
+        <div
+          className="select-container"
+          style={{ marginTop: '2em' }}
+          data-tour="copyright-exclusive"
+        >
           <div style={{ display: 'flex' }}>
             <h4>{clauseLabels.exclusiveRights}</h4>
             <span
@@ -886,7 +892,7 @@ Any modification to this Agreement's terms requires explicit consent from both t
             </>
           )}
         </div>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex' }} data-tour="copyright-expiration">
           <Checkbox
             name="expirationDateExists"
             label="Add an Expiration Date to Clauses"
@@ -920,7 +926,7 @@ Any modification to this Agreement's terms requires explicit consent from both t
           </div>
         )}
         {clauses && (
-          <div style={{ marginTop: '1em' }}>
+          <div style={{ marginTop: '1em' }} data-tour="copyright-addendum">
             <h4>Addendum/Notes</h4>
             <Textarea
               type="text"
@@ -966,7 +972,10 @@ Any modification to this Agreement's terms requires explicit consent from both t
           {uriError && <div className={styles.errorText}>{uriError}</div>}
         </div> */}
         <br />
-        <div style={{ marginTop: '1em', borderTop: '1px solid white' }}>
+        <div
+          style={{ marginTop: '1em', borderTop: '1px solid white' }}
+          data-tour="copyright-search"
+        >
           <br />
           <h3>🔎 Token Search</h3>
           <br />
@@ -1208,6 +1217,7 @@ Any modification to this Agreement's terms requires explicit consent from both t
           <div
             className="token-list"
             style={{ marginTop: '1em', borderTop: '1px solid white' }}
+            data-tour="copyright-works"
           >
             <br />
             <h3>Selected Works To Apply Copyright Agreement:</h3>
@@ -1289,6 +1299,7 @@ Any modification to this Agreement's terms requires explicit consent from both t
           border: '1px solid white',
           whiteSpace: 'pre-wrap',
         }}
+        data-tour="copyright-agreement"
       >
         <h2>License Agreement</h2>
         <pre

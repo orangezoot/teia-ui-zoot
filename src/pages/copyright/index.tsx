@@ -7,6 +7,47 @@ import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { Outlet } from 'react-router';
 import { HEN_CONTRACT_FA2 } from '@constants';
+import Tour, { TourLink } from '@components/tour';
+
+// Form steps are skipped on the Preview and Create tabs.
+const COPYRIGHT_TOUR = [
+  {
+    target: 'copyright-tabs',
+    text: 'Registering takes three steps: write your terms in Edit, check them in Preview, then sign them on-chain in Create.',
+  },
+  {
+    target: 'copyright-clauses',
+    text: 'Pick what owners of your work are allowed to do with it. Click (?) next to a clause to learn more.',
+  },
+  {
+    target: 'copyright-exclusive',
+    text: 'Optionally grant exclusive rights to whoever owns a majority or super-majority of the editions.',
+  },
+  {
+    target: 'copyright-expiration',
+    text: 'Set an end date for the clauses, if they should not last forever.',
+  },
+  {
+    target: 'copyright-addendum',
+    text: 'Add any extra notes, restrictions or scope to the agreement.',
+  },
+  {
+    target: 'copyright-search',
+    text: 'Find the works this agreement covers by token URL, or by contract and token ID. Works you created on Tezos get a verified status.',
+  },
+  {
+    target: 'copyright-works',
+    text: 'The works this agreement will apply to.',
+  },
+  {
+    target: 'copyright-agreement',
+    text: 'The full license text, written from your choices as you go.',
+  },
+  {
+    target: 'copyright-submit',
+    text: 'When you are done, continue to the preview.',
+  },
+];
 
 export default function CopyrightPage() {
   const methods = useForm({
@@ -61,8 +102,11 @@ export default function CopyrightPage() {
 
   return (
     <Page title="Copyright">
-      <h1>Copyright</h1>
-      <Tabs tabs={tabs} />
+      <Tour name="copyright" steps={COPYRIGHT_TOUR} />
+      <h1>
+        Copyright <TourLink name="copyright" title="How copyright registration works" />
+      </h1>
+      <Tabs tabs={tabs} tourTarget="copyright-tabs" />
       <FormProvider {...methods}>
         <AnimatePresence mode="sync">
           <Outlet

@@ -26,6 +26,7 @@ function CopyrightMainForm({ fields, defaultValues, onSubmit }) {
       <Button
         type="submit"
         fit
+        data-tour="copyright-submit"
         shadow_box
         disabled={Object.keys(errors).length > 0}
       >
