@@ -3,9 +3,57 @@ import { Page } from '@atoms/layout'
 import { Button } from '@atoms/button'
 import styles from '@style'
 import { Line } from '@atoms/line'
+import Tour, { TourLink } from '@components/tour'
+
+const FAQ_TOUR = [
+  {
+    target: 'faq-wallet',
+    text: 'Start here: click any question to open its answer. This one covers setting up a Tezos wallet and getting tez, including help from the Teia Fountain.',
+  },
+  {
+    target: 'faq-mint',
+    text: 'How to mint your first OBJKT, and the copyminting rules to follow.',
+  },
+  {
+    target: 'faq-profile',
+    text: 'Add a name, bio and picture so collectors know who you are.',
+  },
+  {
+    target: 'faq-swap',
+    text: 'Put your OBJKTs up for sale, or change their price.',
+  },
+  {
+    target: 'faq-burn',
+    text: 'Remove an OBJKT for good by sending it to the burn address. Burn before you re-mint a mistake.',
+  },
+  {
+    target: 'faq-resell',
+    text: 'Sell an OBJKT you collected from another artist. The artist gets their royalty.',
+  },
+  {
+    target: 'faq-copyright',
+    text: 'Attach copy and usage rights to your OBJKTs when you mint, so collectors can license your work.',
+  },
+  {
+    target: 'faq-general',
+    text: 'More answers to common questions, in the Teia docs.',
+  },
+  {
+    target: 'faq-troubleshooting',
+    text: 'Stuck? The troubleshooting guide in the Teia docs covers common problems.',
+  },
+  {
+    target: 'faq-tools',
+    text: 'Tools made by the community, and other Tezos NFT marketplaces.',
+  },
+  {
+    target: 'faq-safety',
+    text: 'Keep your wallet safe. Never share your private key with anyone.',
+  },
+]
 
 export const FAQ = () => {
-  const Question = ({ text, answer }) => {
+  const Question = ({ text, answer, tour }) => {
     const [isOpen, setIsOpen] = useState(false) // State to manage visibility
 
     const toggleAnswer = () => {
@@ -14,7 +62,9 @@ export const FAQ = () => {
 
     return (
       <li className={styles.buttons}>
-        <Button onClick={toggleAnswer}>{text}</Button>
+        <Button onClick={toggleAnswer} data-tour={tour}>
+          {text}
+        </Button>
         {isOpen && (
           <div
             className={styles.faq__answer}
@@ -27,13 +77,16 @@ export const FAQ = () => {
 
   return (
     <Page title="faq" large>
+      <Tour name="faq" steps={FAQ_TOUR} />
       <div className={styles.faq__outer__container}>
         <h1 className={styles.faq__title}>
-          Getting Started with the TEIA Community
+          Getting Started with the TEIA Community{' '}
+          <TourLink name="faq" title="How this page works" />
         </h1>
         <ul className={styles.faq__container}>
           <Question
             text="How do I Make a Wallet?"
+            tour="faq-wallet"
             answer={`
 <div class="markdown-body">
   <br />
@@ -91,6 +144,7 @@ export const FAQ = () => {
           />
           <Question
             text="How do I Mint?"
+            tour="faq-mint"
             answer={`
 <div class="markdown-body">
   <br />
@@ -173,6 +227,7 @@ export const FAQ = () => {
           />
           <Question
             text="How do I Edit My Profile?"
+            tour="faq-profile"
             answer={`
 <div class="markdown-body">
   <br />
@@ -205,6 +260,7 @@ export const FAQ = () => {
           />
           <Question
             text="How do I Add/Change the Price of My OBJKT?"
+            tour="faq-swap"
             answer={`
 <div class="markdown-body">
   <br />
@@ -255,6 +311,7 @@ export const FAQ = () => {
           />
           <Question
             text="How do I Burn My OBJKT?"
+            tour="faq-burn"
             answer={`
 <div class="markdown-body">
   <br />
@@ -290,6 +347,7 @@ export const FAQ = () => {
           />
           <Question
             text="How do I Resell an OBJKT?"
+            tour="faq-resell"
             answer={`
 <div class="markdown-body">
   <br />
@@ -331,6 +389,7 @@ export const FAQ = () => {
           />
           <Question
             text="How Do I Get Started With Selling Copy and Usage Rights With TEIA?"
+            tour="faq-copyright"
             answer={`
 <div class="markdown-body">
   <br />
@@ -368,18 +427,21 @@ export const FAQ = () => {
         <ul className={styles.faq__container}>
           <Question
             text="General FAQ"
+            tour="faq-general"
             answer={`
 <p>For general questions, check out the <a href="https://github.com/teia-community/teia-docs/wiki/General-FAQs" target="_blank" rel="noopener noreferrer">General FAQ</a> page.</p>
 `}
           />
           <Question
             text="Troubleshooting"
+            tour="faq-troubleshooting"
             answer={`
 <p>If you're having issues, visit the <a href="https://github.com/teia-community/teia-docs/wiki/Troubleshooting" target="_blank" rel="noopener noreferrer">Troubleshooting Guide</a>.</p>
 `}
           />
           <Question
             text="Useful Tools"
+            tour="faq-tools"
             answer={`
 <p>Explore tools created by the community:</p>
 <ul>
@@ -390,6 +452,7 @@ export const FAQ = () => {
           />
           <Question
             text="User Safety"
+            tour="faq-safety"
             answer={`
 <p>Stay safe by following these tips:</p>
 <ul>
