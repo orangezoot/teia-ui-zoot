@@ -89,7 +89,7 @@ export default function WikiPage() {
           {title}
           {page.hidden && <span className={styles.hidden_tag}> (hidden)</span>}
         </h1>
-        <div className={styles.page_actions}>
+        <div className={styles.page_actions} data-tour="wiki-page-actions">
           {canModerate || canPropose ? (
             <Button
               small
@@ -119,7 +119,7 @@ export default function WikiPage() {
         </div>
       </div>
 
-      <p className={styles.page_meta}>
+      <p className={styles.page_meta} data-tour="wiki-page-meta">
         v{page.versionCount} · last edited by{' '}
         <Link to={`/tz/${page.editor}`}>
           {profiles[page.editor]?.alias || walletPreview(page.editor)}

@@ -7,7 +7,40 @@ import { useUserStore } from '@context/userStore'
 import { PATH } from '@constants'
 import { useWiki, useWikiRoles, buildTree, showGetTeiaModal } from '@data/wiki'
 import { WikiSidebar } from '@components/wiki'
+import Tour, { TourLink } from '@components/tour'
 import styles from '@style'
+
+// Page-only steps (edit, history, meta) are skipped on the wiki home.
+const WIKI_TOUR = [
+  {
+    target: 'wiki-propose',
+    text: 'Suggest a new page. Proposing needs TEIA tokens, and moderators review each proposal before it goes live.',
+  },
+  {
+    target: 'wiki-home',
+    text: 'Back to the wiki home page.',
+  },
+  {
+    target: 'wiki-sort',
+    text: 'Sort the page list by title, by when pages were created, or by when they were last edited.',
+  },
+  {
+    target: 'wiki-tree',
+    text: 'Every published page. Sub-pages sit under their parent page.',
+  },
+  {
+    target: 'wiki-page-actions',
+    text: 'Propose an edit to this page, or see every past version in its history.',
+  },
+  {
+    target: 'wiki-page-meta',
+    text: 'The version number, who last edited and proposed the page, and when.',
+  },
+  {
+    target: 'wiki-content',
+    text: 'The page itself. Wiki content is stored on IPFS and its history on the blockchain.',
+  },
+]
 
 /**
  * Wiki shell: loads the full page/proposal state once and shares it with the
@@ -53,10 +86,13 @@ export default function WikiLayout() {
 
   return (
     <Page title="Teia Wiki">
+      <Tour name="wiki" steps={WIKI_TOUR} />
       <div className={styles.container}>
         <div className={styles.header}>
-          <h1 className={styles.headline}>Teia Wiki</h1>
-          <div className={styles.header_actions}>
+          <h1 className={styles.headline}>
+            Teia Wiki <TourLink name="wiki" title="How the wiki works" />
+          </h1>
+          <div className={styles.header_actions} data-tour="wiki-propose">
             {canModerate || canPropose ? (
               <Button small shadow_box to={`${PATH.WIKI}/create`}>
                 {canModerate ? 'New Page' : 'Propose Page'}
@@ -105,10 +141,11 @@ export default function WikiLayout() {
                   secondary
                   onClick={() => navigate(PATH.WIKI)}
                   className={styles.home_link}
+                  data-tour="wiki-home"
                 >
                   Home
                 </Button>
-                <div className={styles.sidebar_sort}>
+                <div className={styles.sidebar_sort} data-tour="wiki-sort">
                   <label htmlFor="wiki-sort">Sort by</label>
                   <select
                     id="wiki-sort"
@@ -124,7 +161,7 @@ export default function WikiLayout() {
                 <WikiSidebar tree={tree} hiddenIds={hiddenIds} />
               </aside>
             )}
-            <section className={styles.content_col}>
+            <section className={styles.content_col} data-tour="wiki-content">
               <Outlet context={outletContext} />
             </section>
           </div>

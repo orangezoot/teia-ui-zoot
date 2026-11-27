@@ -38,7 +38,11 @@ export const WikiSidebar = ({ tree, hiddenIds }) => {
     return <p className={styles.sidebar_empty}>No pages yet.</p>
   }
   return (
-    <nav className={styles.sidebar} aria-label="Wiki navigation">
+    <nav
+      className={styles.sidebar}
+      aria-label="Wiki navigation"
+      data-tour="wiki-tree"
+    >
       <ul className={styles.tree_root}>
         {tree.map((node) => (
           <TreeNode key={node.id} node={node} hiddenIds={hiddenIds} />
